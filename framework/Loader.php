@@ -50,3 +50,5 @@ class Loader {
 	}
 }
 Loader::getInstance();
+
+Loader::addNamespacePath('Framework\\', __DIR__);
