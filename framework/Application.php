@@ -1,10 +1,18 @@
 <?php
+
 namespace Framework;
 
 use Framework\Router\Router;
 
+/**
+ * Application is a main class to load app
+ * 
+ * It realization front controller pattern in framework
+ */
 class Application {
-
+    /**
+     * Run Router class and show resalt of parseRoute()
+     */
     public function run() {
         $router = new Router(include('../app/config/routes.php'));
 

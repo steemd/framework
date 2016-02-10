@@ -2,13 +2,28 @@
 
 namespace Framework\Router;
 
+/**
+ * Router is a main routing class in framework
+ */
 class Router {
-    
+    /**
+     *
+     * @var array 
+     */
     protected $routes;
-    
+    /**
+     * Construct method save routes array
+     * 
+     * @param array $routes
+     */
     function __construct($routes) {
         $this->routes = $routes;
-    } 
+    }
+    /**
+     * ParseRoute return correct route array
+     * 
+     * @return array
+     */
     public function parseRoute(){
         $url = str_replace('/web', '', filter_input(INPUT_SERVER, 'REQUEST_URI'));
         
@@ -24,11 +39,20 @@ class Router {
             }
 
         }
-    } 
+    }
+    /**
+     * Build new route from current params
+     */
     public function buildRoute(){
         
     }
-    
+    /**
+     * Create correct puttern to parseRoute() method
+     * 
+     * @param array $route
+     * 
+     * @return string
+     */
     private function getPattern($route){
         preg_match('~\{([\d\w]+)\}~', $route['pattern'], $resalt);
         
