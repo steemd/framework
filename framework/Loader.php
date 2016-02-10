@@ -32,8 +32,7 @@ class Loader {
 		
 		if(is_array($namespace)){
 			$name = $namespace[0].'\\';
-			$path = str_replace($name, '', $class);
-			$path = str_replace('\\', '/', $path);
+			$path = str_replace('\\', '/', str_replace($name, '', $class));
 			
 			if (!empty(self::$namespaceMap[$name])) {
 				$fullPath = self::$namespaceMap[$name].'/'.$path.'.php';

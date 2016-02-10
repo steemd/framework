@@ -1,16 +1,24 @@
 <?php
 namespace Framework;
 
+use Framework\Router\Router;
+
 class Application {
-		
-	private $config;
-	
-	function __construct($config){
-		$this->config = $config;
-	}
-	
-	public function run() {
-		echo 'Configuration file: <b>'.$this->config.'</b>';
-	}
-	
+
+    public function run() {
+        $router = new Router(include('../app/config/routes.php'));
+
+        $routeInfo = $router->parseRoute();
+
+        if (is_array($routeInfo)) {
+            echo '<pre>';
+            print_r($routeInfo);
+            echo '</pre>';
+        } else {
+            echo '<h2>404</h2>';
+            echo '<p>No URLs faund in site.</p>';
+        }
+        
+    }
+
 }
