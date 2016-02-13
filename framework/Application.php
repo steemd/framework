@@ -7,14 +7,26 @@ use Framework\Router\Router;
 /**
  * Application is a main class to load app
  * 
- * It realization front controller pattern in framework
+ * Its realization front controller pattern in framework
  */
 class Application {
+    /**
+     * @var array 
+     */
+    protected $config;
+    /**
+     * Constructor method include configuration file
+     * 
+     * @param string $path
+     */
+    function __construct($path) {
+        $this->config = include($path);
+    }
     /**
      * Run Router class and show resalt of parseRoute()
      */
     public function run() {
-        $router = new Router(include('../app/config/routes.php'));
+        $router = new Router($this->config['routes']);
 
         $routeInfo = $router->parseRoute();
 
@@ -24,9 +36,7 @@ class Application {
             echo '</pre>';
         } else {
             echo '<h2>404</h2>';
-            echo '<p>No URLs faund in site.</p>';
+            echo '<p>Controller not found</p>';
         }
-        
     }
-
 }

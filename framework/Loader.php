@@ -49,8 +49,7 @@ class Loader {
 	/**
          * Blocked to create clone of Loader class
          */
-	private function __clone(){
-		
+	private function __clone(){	
 	}
 	/**
          * Autoload new class in framework

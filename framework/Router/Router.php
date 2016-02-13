@@ -7,7 +7,6 @@ namespace Framework\Router;
  */
 class Router {
     /**
-     *
      * @var array 
      */
     protected $routes;
@@ -37,14 +36,23 @@ class Router {
                 }
                 return $route;
             }
-
         }
     }
     /**
      * Build new route from current params
+     * 
+     * @param string $name
+     * @param number $id
+     * 
+     * @return string
      */
-    public function buildRoute(){
-        
+    public function buildRoute($name, $id = NULL){
+        if (is_null($id)){
+            $url = $this->routes[$name]['pattern'];
+        } else {
+            $url = str_replace('{id}', $id, $this->routes[$name]['pattern']);
+        }
+        return $url;
     }
     /**
      * Create correct puttern to parseRoute() method
