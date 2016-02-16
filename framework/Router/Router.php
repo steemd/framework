@@ -29,11 +29,15 @@ class Router {
         foreach ($this->routes as $route){
             
             preg_match($this->getPattern($route), $url, $resalt);
-            
+               
             if ($resalt[0]) {
-                if ($resalt[1]) {
-                    $route['data_url']=$resalt[1];
+                if ($this->getParamsName($route)){
+                    $params = array(
+                        $this->getParamsName($route) => $resalt[1],
+                    );
                 }
+                $route['params'] = $params;
+                
                 return $route;
             }
         }
@@ -73,6 +77,18 @@ class Router {
         $pattern = str_replace('/', '\/', $pattern);
         
         return '~^'.$pattern.'$~i';
+    }
+    /**
+     * Return paramenters names
+     * 
+     * @param array $route
+     * 
+     * @return string
+     */
+    private function getParamsName($route) {
+        preg_match('~\{([\d\w]+)\}~', $route['pattern'], $resalt);
+        
+        return $resalt[1];
     }
         
 }
