@@ -25,16 +25,16 @@ class Router {
      */
     public function parseRoute(){
         $url = str_replace('/web', '', filter_input(INPUT_SERVER, 'REQUEST_URI'));
+        $params = array();
         
+        /* @var $route array */
         foreach ($this->routes as $route){
             
             preg_match($this->getPattern($route), $url, $resalt);
                
             if ($resalt[0]) {
                 if ($this->getParamsName($route)){
-                    $params = array(
-                        $this->getParamsName($route) => $resalt[1],
-                    );
+                    $params[$this->getParamsName($route)] = $resalt[1];
                 }
                 $route['params'] = $params;
                 
