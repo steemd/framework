@@ -28,7 +28,7 @@ class Router {
         $params = array();
         
         /* @var $route array */
-        foreach ($this->routes as $route){
+        foreach ($this->routes as $key => $route){
             
             preg_match($this->getPattern($route), $url, $resalt);
                
@@ -37,6 +37,7 @@ class Router {
                     $params[$this->getParamsName($route)] = $resalt[1];
                 }
                 $route['params'] = $params;
+                $route['_name'] = $key;
                 
                 return $route;
             }

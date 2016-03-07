@@ -4,6 +4,7 @@ namespace Framework;
 
 use Framework\Router\Router;
 use Framework\Response\Response;
+use Framework\DI\Service;
 
 /**
  * Application is a main class to load app
@@ -15,7 +16,7 @@ use Framework\Response\Response;
 class Application {
 
     /**
-     * @var array 
+     * @var array $config
      */
     protected $config;
 
@@ -26,6 +27,8 @@ class Application {
      */
     function __construct($path) {
         $this->config = include($path);
+        Service::set('config', $this->config);
+        Service::set('routes', $this->config['routes']);
     }
 
     /**
@@ -37,7 +40,9 @@ class Application {
         $routeInfo = $router->parseRoute();
 
         try {
-            if (is_array($routeInfo)) { 
+            if (is_array($routeInfo)) {
+                Service::set('route', $routeInfo);
+                
                 $controllerName = $routeInfo['controller'];
                 $actionName = $routeInfo['action'].'Action';
                 $params = $routeInfo['params'];
@@ -51,6 +56,10 @@ class Application {
                         $reflectionMethod = $reflectionClass->getMethod($actionName);
                         $response = $reflectionMethod->invokeArgs($reflectionObj, $params);
                         
+                        if (!($response instanceof Response)) {
+                            throw new Exception('Method - '. $actionName .'return not instance of class Response');
+                        }
+                        
                     } else {
                         throw new \Exception('Can not find Method - '.  $actionName);
                     }
@@ -61,8 +70,8 @@ class Application {
             } else {
                 throw new \Exception('404 - Page Not Found');
             }
-        } catch (\Exception $e) {
-            echo '<b>Warning:</b> ' . $e->getMessage() . '<br />';
+        } catch (\Exception $e) {    
+            $response = new Response('<b>Warning:</b> '.$e->getMessage().'<br />');
         }
         
         $response->send();

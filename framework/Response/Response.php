@@ -9,22 +9,42 @@ namespace Framework\Response;
  */
 class Response {
     
-    protected $statusCode = '200';
+    protected $status;
     protected $statusText = array(
         '200' => 'OK',
-        '404' => 'Page Not Found',
+        '303' => 'See Other',
+        '404' => 'Not Found',
+        '500' => 'Internal Server Error',
         );
+    protected  $content;
+    protected  $contentType;
+
+    function __construct($content = '', $status = 200, $contentType = 'text/html; charset=utf-8') { 
+        $this->content = $content;
+        $this->status = $status;
+        $this->contentType = $contentType;
+    }
+
+    /**
+     * generate response headers
+     */
+    public function getHeader(){
+        header('HTTP/1.1 '.$this->status.' '.$this->statusText[$this->status]);
+        header('Content-Type: '.$this->contentType);
+    }
+
+    /**
+     * generate response content
+     */
+    public function getContent() {
+        echo $this->content;
+    }
     
-    function __construct() {   
-    }
-
-    private function getHeader(){
-    }
-
-    private function getContent() {
-    }
-
+    /** 
+     * method sent information on user display
+     */
     public function send(){
-        echo '<br /><br />Some Text from Response';
+        $this->getHeader();
+        $this->getContent();        
     }
 }

@@ -9,26 +9,18 @@ use Framework\Response\Response;
  * @author steemd
  */
 class JsonResponse extends Response {
-    
-    private $content;
             
-    function __construct($array) {
-        $this->content = $array;
-    }
-    
-    private function getHeader(){
-        header('HTTP/1.1 '.$this->statusCode.' '.$this->statusText[$this->statusCode]);
-        header('Content-Type: application/json; charset=utf-8');
+    function __construct($content = '', $status = 200, $contentType = 'application/json; charset=utf-8') {
+        $this->status = $status;
+        $this->content = $content;
+        $this->contentType = $contentType;
     }
 
-    private function getContent() {
+    /**
+     * generate response content
+     */
+    public function getContent() {
         echo json_encode($this->content, JSON_UNESCAPED_UNICODE);
-    }
-    
-    public function send(){
-        $this->getHeader();
-        $this->getContent();        
-    }
-    
-    
+    } 
+   
 }
