@@ -6,13 +6,22 @@ use Framework\Renderer\Renderer;
 use Framework\Response\Response;
 use Framework\Response\RedirectResponse;
 use Framework\DI\Service;
+
 /**
- * Description of Controller
+ * Use to provide data and objects to users COntrollers
  *
  * @author steemd
  */
 abstract class Controller {
     
+    /**
+     * Return Response object with contents
+     * 
+     * @param string $template
+     * @param array $data
+     * 
+     * @return Response
+     */
     public function render($template, $data){
         $calledClassName = get_called_class();
         
@@ -22,10 +31,24 @@ abstract class Controller {
         return new Response($content);
     }
     
+    /**
+     * Return RedirectResponse object
+     * 
+     * @param string $url
+     * 
+     * @return RedirectResponse
+     */
     public function redirect($url = '/'){
         return new RedirectResponse($url);
     }
     
+    /**
+     * Return Route name
+     * 
+     * @param type $name
+     * 
+     * @return string $url
+     */
     public function generateRoute($name){
         $routes = Service::get('routes');
         $url = $routes[$name]['pattern'];

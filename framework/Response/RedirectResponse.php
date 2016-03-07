@@ -4,14 +4,25 @@ namespace Framework\Response;
 
 use Framework\Response\Response;
 /**
- * Description of JsonResponse
+ * Its RedirectResponse Class and redirects the user to the new URL
  *
  * @author steemd
  */
 class RedirectResponse extends Response {
     
+    /**
+     * @var string $url
+     */
     private $url;
-            
+
+    /**
+     * Constructor method add properties
+     * 
+     * @param type $url
+     * @param type $text
+     * @param type $status
+     * @param type $contentType
+     */
     function __construct($url = '/', $text = 'Redirect', $status = 303, $contentType = 'text/html; charset=utf-8') {
         $this->url = $url;
         $this->status = $status;

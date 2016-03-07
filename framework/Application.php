@@ -21,7 +21,7 @@ class Application {
     protected $config;
 
     /**
-     * Constructor method include configuration file
+     * Constructor method include configuration file and add Servises
      * 
      * @param string $path
      */

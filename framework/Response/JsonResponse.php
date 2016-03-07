@@ -4,12 +4,19 @@ namespace Framework\Response;
 
 use Framework\Response\Response;
 /**
- * Description of JsonResponse
- *
+ * Its JsonResponse Class to return JSON resalt to browser
+ * 
  * @author steemd
  */
 class JsonResponse extends Response {
-            
+    
+    /**
+     * Constructor init Object and add properties
+     * 
+     * @param type $content
+     * @param type $status
+     * @param type $contentType
+     */
     function __construct($content = '', $status = 200, $contentType = 'application/json; charset=utf-8') {
         $this->status = $status;
         $this->content = $content;

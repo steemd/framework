@@ -12,23 +12,35 @@ use Framework\DI\Service;
 class Renderer {
 
     /**
-     * @var mixed $template
+     * @var string $layoutUrl
+     * @var string $templateUrl
      * @var array $date
      */
     private $layoutUrl;
     private $templateUrl;
     private $data;
 
+    /**
+     * Constructor method init all properties in Renderer Class
+     * 
+     * @param type $template
+     * @param type $data
+     * @param type $className
+     */
     function __construct($template, $data = array(), $className) {
         $config = Service::get('config');
         $viewNameDir = str_replace('Controller', '', str_replace('Blog\\Controller\\', '', $className));
 
         $this->templateUrl =  __DIR__.'/../../src/Blog/views/'.$viewNameDir.'/'.$template.'.php';
-        //$this->templateUrl = __DIR__ . '/../../src/Blog/views/Post/' . $template . '.php';
         $this->data = $data;
         $this->layoutUrl = $config['main_layout'];
     }
 
+    /**
+     * Renderer and return all content to Response Class
+     * 
+     * @return type
+     */
     public function getContent() {
 
         extract($this->data);
@@ -47,6 +59,13 @@ class Renderer {
         return $resalt;
     }
     
+    /**
+     * Render main layout with content block an return it
+     * 
+     * @param string $content
+     * 
+     * @return type
+     */
     public function getMainContent($content){
         $route = Service::get('route');
         

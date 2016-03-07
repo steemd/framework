@@ -9,16 +9,38 @@ namespace Framework\Response;
  */
 class Response {
     
+    /**
+     * @var number $status
+     */
     protected $status;
+    
+    /**
+     * @var array  $statusText
+     */
     protected $statusText = array(
         '200' => 'OK',
         '303' => 'See Other',
         '404' => 'Not Found',
         '500' => 'Internal Server Error',
         );
+    
+    /**
+     * @var text $content
+     */
     protected  $content;
+    
+    /**
+     * @var text $contentType
+     */
     protected  $contentType;
 
+    /**
+     * Constructor init Object method add properties
+     * 
+     * @param type $content
+     * @param type $status
+     * @param type $contentType
+     */
     function __construct($content = '', $status = 200, $contentType = 'text/html; charset=utf-8') { 
         $this->content = $content;
         $this->status = $status;

@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Framework\DI;
 
 /**
@@ -15,12 +9,27 @@ namespace Framework\DI;
  */
 class Service {
     
+    /**
+     * @var array  $services
+     */
     private static $services = array();
     
+    /**
+     * Add new object to Service storage
+     * 
+     * @param string $name
+     * @param mixed $data
+     */
     public static function set($name, $data){
         self::$services[$name] = $data;
     }
     
+    /**
+     * Return mixed data from Service storage
+     * 
+     * @param string $name
+     * @return mixed Storage data
+     */
     public static function get($name){
         if (empty(self::$services[$name])) {
             return null;
