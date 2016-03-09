@@ -4,6 +4,7 @@ namespace Framework\Controller;
 
 use Framework\Renderer\Renderer;
 use Framework\Response\Response;
+use Framework\Request\Request;
 use Framework\Response\RedirectResponse;
 use Framework\DI\Service;
 
@@ -53,5 +54,14 @@ abstract class Controller {
         $routes = Service::get('routes');
         $url = $routes[$name]['pattern'];
         return $url;
+    }
+    
+    /**
+     * Return Request object
+     * 
+     * @return Request
+     */
+    public function getRequest(){
+        return new Request();
     }
 }

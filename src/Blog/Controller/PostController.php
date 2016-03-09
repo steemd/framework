@@ -22,16 +22,7 @@ class PostController extends Controller
 
     public function indexAction()
     {
-        $obj = new \stdClass();
-        $obj->id = 1;
-        $obj->title = 'Title';
-        $obj->date = 'now';
-        $obj->name = 'Dima';
-        $obj->content = 'Some simple text';
-        
-        $arr = array($obj, $obj, $obj);
-        
-        return $this->render('index.html', array('posts' => $arr/*Post::find('all')*/));
+        return $this->render('index.html', array('posts' => Post::find('all')));
     }
 
     public function getPostAction($id)

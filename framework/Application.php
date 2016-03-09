@@ -29,6 +29,7 @@ class Application {
         $this->config = include($path);
         Service::set('config', $this->config);
         Service::set('routes', $this->config['routes']);
+        Service::set('pdo', $this->config['pdo']);
     }
 
     /**
