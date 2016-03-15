@@ -4,6 +4,7 @@ namespace Framework\Renderer;
 
 use Framework\DI\Service;
 use Blog\Model\Post;
+use Framework\Request\Request;
 
 /**
  * Renderer is uisng to return correct content to App
@@ -45,23 +46,23 @@ class Renderer {
     public function getContent() {
 
         extract($this->data);
+        
+        if (!empty($errors['token'])){
+            $error = $errors['token'];
+        }
 
         $include = function($controllerName, $actionName, $data = array()) { 
             $reflectionMethod  = new \ReflectionMethod($controllerName, $actionName.'Action');
             $response = $reflectionMethod->invokeArgs(new $controllerName(), $data);
-            echo '<p class="alert alert-info">';
+            echo '<br /><br /><p class="alert alert-info">';
             $response->getContent();
-            echo '</p><br /><br /><br />';
+            echo '</p>';
         };
         
         $generateToken = function(){
             $token = md5('solt_string'.uniqid());
-            
+            setcookie('token', $token);      
             echo '<input type="hidden" value="'.$token.'" name="token">';
-            
-            echo '<pre>';
-            print_r($_POST);
-            echo '</pre>';
         };
 
         ob_start();

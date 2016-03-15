@@ -72,12 +72,11 @@ abstract class ActiveRecord {
         $db = self::getDbConnection();
         $table = static::getTable();
         $data = get_object_vars($this);
+        $data['name'] = 'steemd';
         
-         $query = $db->prepare($this->getInsertQuery($data, $table));    
-         if ($query->execute()) {
-             echo 'Insert Ok';
-         } else {
-             echo 'Error';
+         $query = $db->prepare($this->getInsertString($data, $table));    
+         if (!$query->execute()) {
+             throw new \Exception('Cant save object');
          }     
     }
     
@@ -89,7 +88,7 @@ abstract class ActiveRecord {
      * 
      * @return string @sql
      */
-    private function getInsertQuery($data, $table) {
+    private function getInsertString($data, $table) {
         $attr = '';
         $values = '';
         

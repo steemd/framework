@@ -39,7 +39,7 @@ abstract class Controller {
      * 
      * @return RedirectResponse
      */
-    public function redirect($url = '/'){
+    public function redirect($url = '/', $msg){
         return new RedirectResponse($url);
     }
     
