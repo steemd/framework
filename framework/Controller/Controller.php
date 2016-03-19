@@ -5,7 +5,7 @@ namespace Framework\Controller;
 use Framework\Renderer\Renderer;
 use Framework\Response\Response;
 use Framework\Request\Request;
-use Framework\Response\RedirectResponse;
+use Framework\Response\ResponseRedirect;
 use Framework\DI\Service;
 
 /**
@@ -39,8 +39,8 @@ abstract class Controller {
      * 
      * @return RedirectResponse
      */
-    public function redirect($url = '/', $msg){
-        return new RedirectResponse($url);
+    public function redirect($url = '/', $msg = null){
+        return new ResponseRedirect($url);
     }
     
     /**

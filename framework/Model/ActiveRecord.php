@@ -20,6 +20,7 @@ abstract class ActiveRecord {
      * Consrtuctor method
      */
     function __construct() {
+        
     }
 
     /**
@@ -64,22 +65,23 @@ abstract class ActiveRecord {
 
         return $resalt;
     }
-    
+
     /**
      * Method save new Post row in DB
      */
-    public function save(){
+    public function save() {
         $db = self::getDbConnection();
         $table = static::getTable();
         $data = get_object_vars($this);
-        $data['name'] = 'steemd';
-        
-         $query = $db->prepare($this->getInsertString($data, $table));    
-         if (!$query->execute()) {
-             throw new \Exception('Cant save object');
-         }     
+        if ($table == 'posts') {
+            $data['name'] = 'steemd';
+        }
+        $query = $db->prepare($this->getInsertString($data, $table));
+        if (!$query->execute()) {
+            throw new \Exception('Cant save object');
+        }
     }
-    
+
     /**
      * Method return Insert SQL string whit binding data
      * 
@@ -91,23 +93,41 @@ abstract class ActiveRecord {
     private function getInsertString($data, $table) {
         $attr = '';
         $values = '';
-        
-        foreach ($data as $key=>$val){
-            
-            if ($val instanceof \DateTime){
+
+        foreach ($data as $key => $val) {
+
+            if ($val instanceof \DateTime) {
                 $val = $val->format('Y-m-d H:i:s');
             }
-            $attr .= "`".$key."`, ";
-            $values .= "'".$val."', ";
+            $attr .= "`" . $key . "`, ";
+            $values .= "'" . addslashes($val) . "', ";
         }
-        
-        $attr = trim($attr);
-        $attr = substr($attr, 0, strlen($attr)-1);
-        
-        $values = trim($values);
-        $values = substr($values, 0, strlen($values)-1);
 
-        return "INSERT INTO ".$table."(".$attr.") VALUES (".$values.");";
+        $attr = trim($attr);
+        $attr = substr($attr, 0, strlen($attr) - 1);
+
+        $values = trim($values);
+        $values = substr($values, 0, strlen($values) - 1);
+
+        return "INSERT INTO " . $table . "(" . $attr . ") VALUES (" . $values . ");";
+    }
+
+    /**
+     * Return User object by email
+     * 
+     * @param type $email
+     * 
+     * @return boolean
+     */
+    static function findByEmail($email) {
+        $db = self::getDbConnection();
+        $table = static::getTable();
+
+        $query = $db->prepare("SELECT * FROM $table WHERE email = :email");
+        $query->execute(array(':email' => $email));
+        $resalt = $query->fetchObject();
+
+        return $resalt;
     }
 
 }

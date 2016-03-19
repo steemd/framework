@@ -4,6 +4,8 @@ namespace Framework;
 
 use Framework\Router\Router;
 use Framework\Response\Response;
+use Framework\Security\Security;
+use Framework\Session\Session;
 use Framework\DI\Service;
 
 /**
@@ -30,6 +32,8 @@ class Application {
         Service::set('config', $this->config);
         Service::set('routes', $this->config['routes']);
         Service::set('pdo', $this->config['pdo']);
+        Service::set('security', new Security());
+        Service::set('session', new Session());
     }
 
     /**

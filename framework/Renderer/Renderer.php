@@ -3,8 +3,8 @@
 namespace Framework\Renderer;
 
 use Framework\DI\Service;
-use Blog\Model\Post;
 use Framework\Request\Request;
+use Framework\Session\Session;
 
 /**
  * Renderer is uisng to return correct content to App
@@ -64,6 +64,12 @@ class Renderer {
             setcookie('token', $token);      
             echo '<input type="hidden" value="'.$token.'" name="token">';
         };
+        
+        $getRoute = function($name) {
+            $routes = Service::get('routes');
+            $route = $routes[$name]['pattern'];
+            return $route;
+        };
 
         ob_start();
         include $this->templateUrl;
@@ -85,6 +91,10 @@ class Renderer {
     public function getMainContent($content){
         $route = Service::get('route');
         
+        if (Session::get('auth')){
+           $user = Service::get('security')->getUser(); 
+        }
+   
         $getRoute = function($name) {
             $routes = Service::get('routes');
             return $routes[$name]['pattern'];

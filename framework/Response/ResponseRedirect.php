@@ -8,7 +8,7 @@ use Framework\Response\Response;
  *
  * @author steemd
  */
-class RedirectResponse extends Response {
+class ResponseRedirect extends Response {
     
     /**
      * @var string $url
