@@ -54,7 +54,8 @@ class Renderer {
         $include = function($controllerName, $actionName, $data = array()) { 
             $reflectionMethod  = new \ReflectionMethod($controllerName, $actionName.'Action');
             $response = $reflectionMethod->invokeArgs(new $controllerName(), $data);
-            echo '<br /><br /><p class="alert alert-info">';
+            echo '<h3>Include Title</h3>';
+            echo '<p class="alert alert-info">';
             $response->getContent();
             echo '</p>';
         };
@@ -67,8 +68,7 @@ class Renderer {
         
         $getRoute = function($name) {
             $routes = Service::get('routes');
-            $route = $routes[$name]['pattern'];
-            return $route;
+            return $routes[$name]['pattern'];
         };
 
         ob_start();

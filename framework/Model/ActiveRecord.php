@@ -3,6 +3,7 @@
 namespace Framework\Model;
 
 use Framework\DI\Service;
+use Framework\Session\Session;
 
 /**
  * ActiveRecord its main Model Class to get connection whith DB
@@ -74,7 +75,7 @@ abstract class ActiveRecord {
         $table = static::getTable();
         $data = get_object_vars($this);
         if ($table == 'posts') {
-            $data['name'] = 'steemd';
+            $data['name'] = Session::get('userEmail');
         }
         $query = $db->prepare($this->getInsertString($data, $table));
         if (!$query->execute()) {
@@ -100,7 +101,7 @@ abstract class ActiveRecord {
                 $val = $val->format('Y-m-d H:i:s');
             }
             $attr .= "`" . $key . "`, ";
-            $values .= "'" . addslashes($val) . "', ";
+            $values .= "'" . addslashes(htmlspecialchars($val)) . "', ";
         }
 
         $attr = trim($attr);
@@ -113,21 +114,46 @@ abstract class ActiveRecord {
     }
 
     /**
+     * Return User object by Attribute
+     * 
+     * @param string $name
+     * @param array $arguments
+     * 
+     * @return mixed
+     */
+    static public function __callStatic($name, $arguments) {
+        if (stristr($name, 'findBy') !== false) {
+            $db = self::getDbConnection();
+            $table = static::getTable();
+            
+            $attr = lcfirst(str_replace('findBy', '', $name));
+
+            $query = $db->prepare("SELECT * FROM {$table} WHERE $attr = :{$attr}");
+            $query->execute(array(":{$attr}" => $arguments[0]));
+            $resalt = $query->fetchObject();
+
+            return $resalt;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Return User object by email
      * 
      * @param type $email
      * 
      * @return boolean
      */
-    static function findByEmail($email) {
-        $db = self::getDbConnection();
-        $table = static::getTable();
-
-        $query = $db->prepare("SELECT * FROM $table WHERE email = :email");
-        $query->execute(array(':email' => $email));
-        $resalt = $query->fetchObject();
-
-        return $resalt;
-    }
+//    static function findByEmail($email) {
+//        $db = self::getDbConnection();
+//        $table = static::getTable();
+//
+//        $query = $db->prepare("SELECT * FROM $table WHERE email = :email");
+//        $query->execute(array(':email' => $email));
+//        $resalt = $query->fetchObject();
+//
+//        return $resalt;
+//    }
 
 }

@@ -21,9 +21,7 @@ class Security {
     }
     
     public function setUser($user) {
-        Session::set('userId', $user->id);
         Session::set('userEmail', $user->email);
-        Session::set('userPass', $user->password);
         Session::set('userRole', $user->role);
         Session::set('auth', true);
     }

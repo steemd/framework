@@ -4,9 +4,11 @@ namespace Framework;
 
 use Framework\Router\Router;
 use Framework\Response\Response;
+use Framework\Response\ResponseRedirect;
 use Framework\Security\Security;
 use Framework\Session\Session;
 use Framework\DI\Service;
+use Framework\Exception\RoleException;
 
 /**
  * Application is a main class to load app
@@ -47,6 +49,14 @@ class Application {
         try {
             if (is_array($routeInfo)) {
                 Service::set('route', $routeInfo);
+
+                if (isset($routeInfo['security'][0]) && !Service::get('session')->get('auth')){
+
+                    if ($role == Service::get('session')->get('userRole')){
+                       Session::set('returnUrl', Service::get('route')['pattern']);
+                       throw new RoleException('You dont have anout permission to enter'); 
+                    }     
+                }
                 
                 $controllerName = $routeInfo['controller'];
                 $actionName = $routeInfo['action'].'Action';
@@ -62,7 +72,7 @@ class Application {
                         $response = $reflectionMethod->invokeArgs($reflectionObj, $params);
                         
                         if (!($response instanceof Response)) {
-                            throw new Exception('Method - '. $actionName .'return not instance of class Response');
+                            throw new \Exception('Method - <b>'. $actionName .'</b> return not instance of class Response');
                         }
                         
                     } else {
@@ -75,12 +85,18 @@ class Application {
             } else {
                 throw new \Exception('404 - Page Not Found');
             }
+        } catch (RoleException $e) {
+            $response = new ResponseRedirect('/login');
+            
         } catch (\Exception $e) {    
-            $response = new Response('<b>Warning:</b> '.$e->getMessage().'<br />');
+            $response = new Response('<b>My Message:</b> '.$e->getMessage().'<br />');
         }
         
         $response->send();
         
+        echo '<pre>';
+        print_r($_SESSION);
+        echo '</pre>';
     }
 
 }

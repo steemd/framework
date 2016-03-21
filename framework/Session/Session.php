@@ -8,13 +8,7 @@ namespace Framework\Session;
  * @author steemd
  */
 class Session {
-    
-    /**
-     *
-     * @var type 
-     */
-    public $returnUrl = null;
-    
+ 
     /**
      * Initial session start
      */
@@ -22,6 +16,26 @@ class Session {
         session_start();
     } 
     
+    /**
+     * Get Session data
+     * 
+     * @param type $name
+     * @return type
+     */
+    function __get($name) {
+        return self::get($name) ? self::get($name) : null;
+    }
+    
+    /**
+     * Set Session data
+     * 
+     * @param type $name
+     * @param type $value
+     */
+    function __set($name, $value) {
+        $_SESSION[$name] = $value;
+    }
+
     /**
      * Save session data
      * 

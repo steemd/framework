@@ -3,6 +3,7 @@
 namespace Framework\Response;
 
 use Framework\Response\Response;
+use Framework\Session\Session;
 /**
  * Its RedirectResponse Class and redirects the user to the new URL
  *
