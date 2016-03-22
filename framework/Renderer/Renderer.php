@@ -31,9 +31,12 @@ class Renderer {
      */
     function __construct($template, $data = array(), $className) {
         $config = Service::get('config');
-        $viewNameDir = str_replace('Controller', '', str_replace('Blog\\Controller\\', '', $className));
+        
+        $bandle = explode('\\', $className);
+        $bandleName = array_shift($bandle);
+        $bandleController = str_replace('Controller', '', array_pop($bandle));
 
-        $this->templateUrl =  __DIR__.'/../../src/Blog/views/'.$viewNameDir.'/'.$template.'.php';
+        $this->templateUrl =  __DIR__.'/../../src/'.$bandleName.'/views/'.$bandleController.'/'.$template.'.php';
         $this->data = $data;
         $this->layoutUrl = $config['main_layout'];
     }
@@ -43,7 +46,7 @@ class Renderer {
      * 
      * @return string $resalt
      */
-    public function getContent() {
+    public function renderContent() {
 
         extract($this->data);
         
@@ -54,15 +57,15 @@ class Renderer {
         $include = function($controllerName, $actionName, $data = array()) { 
             $reflectionMethod  = new \ReflectionMethod($controllerName, $actionName.'Action');
             $response = $reflectionMethod->invokeArgs(new $controllerName(), $data);
-            echo '<h3>Include Title</h3>';
-            echo '<p class="alert alert-info">';
+            echo '<h3>Include</h3>';
+            echo '<p>';
             $response->getContent();
             echo '</p>';
         };
         
         $generateToken = function(){
             $token = md5('solt_string'.uniqid());
-            setcookie('token', $token);      
+            Session::set('token', $token);      
             echo '<input type="hidden" value="'.$token.'" name="token">';
         };
         
@@ -70,44 +73,35 @@ class Renderer {
             $routes = Service::get('routes');
             return $routes[$name]['pattern'];
         };
-
-        ob_start();
-        include $this->templateUrl;
-        $content = ob_get_contents();
-        ob_end_clean();
-
-        $resalt  = $this->getMainContent($content);
         
-        return $resalt;
-    }
-    
-    /**
-     * Render main layout with content block an return it
-     * 
-     * @param string $content
-     * 
-     * @return string $resalt
-     */
-    public function getMainContent($content){
         $route = Service::get('route');
         
         if (Session::get('auth')){
            $user = Service::get('security')->getUser(); 
         }
-   
-        $getRoute = function($name) {
-            $routes = Service::get('routes');
-            return $routes[$name]['pattern'];
-        };
 
-        $flush = array();
-        
+        if (isset(Service::get('session')->flash)){
+            $flush = array(
+                'info' => array(Service::get('session')->flash,
+                    )
+            );
+            unset(Service::get('session')->flash);
+        } else {
+            $flush = array();
+        }
+
+        //Render template
+        ob_start();
+        include $this->templateUrl;
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        //Render main layout 
         ob_start();
         include $this->layoutUrl;
         $resalt = ob_get_contents();
         ob_end_clean();
         
-        return $resalt;    
+        return $resalt;
     }
-
 }

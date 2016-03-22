@@ -3,7 +3,7 @@
 namespace Framework\Security;
 
 use Framework\Session\Session;
-use Blog\Model\User;
+use Framework\DI\Service;
 
 /**
  * Description of Security
@@ -21,13 +21,15 @@ class Security {
     }
     
     public function setUser($user) {
+        
         Session::set('userEmail', $user->email);
         Session::set('userRole', $user->role);
         Session::set('auth', true);
     }
     
     public function getUser(){
-        $user = new User();
+        $userClass = Service::get('config')['security']['user_class'];
+        $user = new $userClass();
         $user->email = Session::get('userEmail');
         $user->role = Session::get('userRole');
         return $user;

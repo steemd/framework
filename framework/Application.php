@@ -93,9 +93,13 @@ class Application {
         }
         
         $response->send();
-        
-        echo '<pre>';
+
+        echo '<b>SESSION</b><pre>';
         print_r($_SESSION);
+        echo '</pre>';
+        
+        echo '<b>POST</b><pre>';
+        print_r($_POST);
         echo '</pre>';
     }
 

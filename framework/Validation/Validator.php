@@ -3,6 +3,8 @@
 namespace Framework\Validation;
 
 use Framework\Request\Request;
+use Framework\Session\Session;
+use Framework\DI\Service;
 
 /**
  * Description of Validator
@@ -69,7 +71,8 @@ class Validator {
     private function validToken() {
         $request = new Request();
         $fromPost = $request->post('token');
-        $fromCookie = $request->getCookie('token');
+        $fromCookie = Session::get('token');
+        unset(Service::get('session')->token);
 
         if ($fromPost !== $fromCookie) {
             return 'Not valid token data';

@@ -66,6 +66,10 @@ return array(
             'id'      => '\d+',
             '_method' => 'POST'
         )
-
-    )
+    ),
+    'list_post'      => array(
+        'pattern'       => '/posts/list',
+        'controller'    => 'CMS\\Controller\\BlogController',
+        'action'        => 'list',
+    ),
 );

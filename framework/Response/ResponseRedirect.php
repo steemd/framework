@@ -24,7 +24,7 @@ class ResponseRedirect extends Response {
      * @param type $status
      * @param type $contentType
      */
-    function __construct($url = '/', $text = 'Redirect', $status = 303, $contentType = 'text/html; charset=utf-8') {
+    function __construct($url = '/', $text = '', $status = 303, $contentType = 'text/html; charset=utf-8') {
         $this->url = $url;
         $this->status = $status;
         $this->contentType = $contentType;
@@ -36,7 +36,7 @@ class ResponseRedirect extends Response {
     public function getHeader(){
         header('HTTP/1.1 '.$this->status.' '.$this->statusText[$this->status]);
         header('Content-Type: '.$this->contentType);
-        header('Location: /web'. $this->url);
+        header('Location: '. $this->url);
     }
 
     /**

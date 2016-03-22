@@ -7,6 +7,7 @@ use Framework\Response\Response;
 use Framework\Request\Request;
 use Framework\Response\ResponseRedirect;
 use Framework\DI\Service;
+use Framework\Session\Session;
 
 /**
  * Use to provide data and objects to users COntrollers
@@ -23,11 +24,11 @@ abstract class Controller {
      * 
      * @return Response
      */
-    public function render($template, $data){
+    public function render($template, $data = array()){
         $calledClassName = get_called_class();
         
         $renderer = new Renderer($template, $data, $calledClassName);
-        $content = $renderer->getContent();
+        $content = $renderer->renderContent();
         
         return new Response($content);
     }
@@ -39,7 +40,12 @@ abstract class Controller {
      * 
      * @return RedirectResponse
      */
-    public function redirect($url = '/', $msg = null){
+    public function redirect($url = '/', $msg = ''){
+        
+        if($msg !== ''){
+            Session::set('flash', $msg);
+        }
+        
         return new ResponseRedirect($url);
     }
     
@@ -50,9 +56,14 @@ abstract class Controller {
      * 
      * @return string $url
      */
-    public function generateRoute($name){
+    public function generateRoute($name, $id = null){
         $routes = Service::get('routes');
         $url = $routes[$name]['pattern'];
+        
+        if(!is_null($id)){
+            $url = str_replace('{id}', $id, $url);
+        }
+        
         return $url;
     }
     

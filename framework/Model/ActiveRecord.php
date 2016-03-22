@@ -68,20 +68,29 @@ abstract class ActiveRecord {
     }
 
     /**
-     * Method save new Post row in DB
+     * Method save or update one Post in DB
+     * 
+     * @throws \Exception
      */
     public function save() {
         $db = self::getDbConnection();
         $table = static::getTable();
         $data = get_object_vars($this);
         if ($table == 'posts') {
-            $data['name'] = Session::get('userEmail');
+            $data['name'] = Service::get('session')->userEmail;
         }
-        $query = $db->prepare($this->getInsertString($data, $table));
+
+        if (isset($data['id'])) {
+            $query = $db->prepare($this->getUpdateString($data, $table));     
+        } else {
+            $query = $db->prepare($this->getInsertString($data, $table));
+        }
+        
         if (!$query->execute()) {
-            throw new \Exception('Cant save object');
-        }
+                throw new \Exception('Cant save object');
+            }
     }
+
 
     /**
      * Method return Insert SQL string whit binding data
@@ -114,6 +123,34 @@ abstract class ActiveRecord {
     }
 
     /**
+     * Method return Update SQL string whit binding data
+     * 
+     * @param array $data
+     * @param string $table
+     * 
+     * @return string @sql
+     */
+    private function getUpdateString($data, $table) {
+        $attrVal = '';
+        $id = (int) $data['id'];
+
+        foreach ($data as $key => $val) {
+            if ($key !== 'id') {
+                if ($val instanceof \DateTime) {
+                    $val = $val->format('Y-m-d H:i:s');
+                }
+                if ($attrVal == '') {
+                    $attrVal .= $key . " = '" . addslashes(htmlspecialchars($val)) . "'";
+                } else {
+                    $attrVal .= ", " . $key . " = '" . addslashes(htmlspecialchars($val)) . "'";
+                }
+            }
+        }
+
+        return "UPDATE " . $table . " SET " . $attrVal . " WHERE id = " . $id;
+    }
+
+    /**
      * Return User object by Attribute
      * 
      * @param string $name
@@ -125,7 +162,7 @@ abstract class ActiveRecord {
         if (stristr($name, 'findBy') !== false) {
             $db = self::getDbConnection();
             $table = static::getTable();
-            
+
             $attr = lcfirst(str_replace('findBy', '', $name));
 
             $query = $db->prepare("SELECT * FROM {$table} WHERE $attr = :{$attr}");
@@ -155,5 +192,4 @@ abstract class ActiveRecord {
 //
 //        return $resalt;
 //    }
-
 }

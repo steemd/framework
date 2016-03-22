@@ -35,7 +35,25 @@ class Session {
     function __set($name, $value) {
         $_SESSION[$name] = $value;
     }
+    
+    /**
+     * Unset SESSION var
+     * 
+     * @param type $name
+     */
+    function __unset($name) {
+        unset($_SESSION[$name]);
+    }
 
+    /**
+     * Return TRUE or FALSE for SESSION var
+     * 
+     * @param type $name
+     * @return type
+     */
+    function __isset($name) {
+        return isset($_SESSION[$name]);
+    }
     /**
      * Save session data
      * 
