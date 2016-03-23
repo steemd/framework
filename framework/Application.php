@@ -50,6 +50,7 @@ class Application {
             if (is_array($routeInfo)) {
                 Service::set('route', $routeInfo);
 
+                //@TODO security varification user
                 if (isset($routeInfo['security'][0]) && !Service::get('session')->get('auth')){
 
                     if ($role == Service::get('session')->get('userRole')){
@@ -93,14 +94,6 @@ class Application {
         }
         
         $response->send();
-
-        echo '<b>SESSION</b><pre>';
-        print_r($_SESSION);
-        echo '</pre>';
-        
-        echo '<b>POST</b><pre>';
-        print_r($_POST);
-        echo '</pre>';
     }
 
 }

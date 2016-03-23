@@ -81,16 +81,37 @@ abstract class ActiveRecord {
         }
 
         if (isset($data['id'])) {
-            $query = $db->prepare($this->getUpdateString($data, $table));     
+            $query = $db->prepare($this->getUpdateString($data, $table));
         } else {
             $query = $db->prepare($this->getInsertString($data, $table));
         }
-        
+
         if (!$query->execute()) {
-                throw new \Exception('Cant save object');
-            }
+            throw new \Exception('Cant save object');
+        }
     }
 
+    /**
+     * Remove one iten from DB
+     * 
+     * @param type $id
+     * @throws \Exception
+     */
+    static function remove($id = null) {
+        $db = self::getDbConnection();
+        $table = static::getTable();
+
+        if (is_null($id)) {
+            throw new \Exception('Cant remove item, incorrect ID');
+            
+        } else {
+            $id = (int) $id;
+            $query = $db->prepare("DELETE FROM $table WHERE id = " . $id . ";");
+            if (!$query->execute()) {
+                throw new \Exception('Cant remove item');
+            }
+        }
+    }
 
     /**
      * Method return Insert SQL string whit binding data
@@ -105,21 +126,18 @@ abstract class ActiveRecord {
         $values = '';
 
         foreach ($data as $key => $val) {
-
             if ($val instanceof \DateTime) {
                 $val = $val->format('Y-m-d H:i:s');
             }
-            $attr .= "`" . $key . "`, ";
-            $values .= "'" . addslashes(htmlspecialchars($val)) . "', ";
+            if ($attr == '' && $values == '') {
+                $attr .= $key;
+                $values .= "'" . trim(addslashes(htmlspecialchars($val))) . "'";
+            } else {
+                $attr .= ", " . $key;
+                $values .= ", '" . trim(addslashes(htmlspecialchars($val))) . "'";
+            }
         }
-
-        $attr = trim($attr);
-        $attr = substr($attr, 0, strlen($attr) - 1);
-
-        $values = trim($values);
-        $values = substr($values, 0, strlen($values) - 1);
-
-        return "INSERT INTO " . $table . "(" . $attr . ") VALUES (" . $values . ");";
+        return "INSERT INTO " . $table . " (" . $attr . ") VALUES (" . $values . ");";
     }
 
     /**
@@ -147,11 +165,11 @@ abstract class ActiveRecord {
             }
         }
 
-        return "UPDATE " . $table . " SET " . $attrVal . " WHERE id = " . $id;
+        return "UPDATE " . $table . " SET " . $attrVal . " WHERE id = " . $id . ";";
     }
 
     /**
-     * Return User object by Attribute
+     * Return User object by Attribute name
      * 
      * @param string $name
      * @param array $arguments
@@ -175,21 +193,4 @@ abstract class ActiveRecord {
         }
     }
 
-    /**
-     * Return User object by email
-     * 
-     * @param type $email
-     * 
-     * @return boolean
-     */
-//    static function findByEmail($email) {
-//        $db = self::getDbConnection();
-//        $table = static::getTable();
-//
-//        $query = $db->prepare("SELECT * FROM $table WHERE email = :email");
-//        $query->execute(array(':email' => $email));
-//        $resalt = $query->fetchObject();
-//
-//        return $resalt;
-//    }
 }

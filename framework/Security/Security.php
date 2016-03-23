@@ -12,6 +12,11 @@ use Framework\DI\Service;
  */
 class Security {
 
+    /**
+     * Method isAuthenticated
+     * 
+     * @return boolean
+     */
     public function isAuthenticated(){
         if(Session::get('auth')){
             return true;
@@ -20,13 +25,22 @@ class Security {
         }
     }
     
-    public function setUser($user) {
-        
+    /**
+     * Set User to Session
+     * 
+     * @param type $user
+     */
+    public function setUser($user) {   
         Session::set('userEmail', $user->email);
         Session::set('userRole', $user->role);
         Session::set('auth', true);
     }
     
+    /**
+     * Return User object
+     * 
+     * @return \Framework\Security\userClass
+     */
     public function getUser(){
         $userClass = Service::get('config')['security']['user_class'];
         $user = new $userClass();
@@ -35,7 +49,10 @@ class Security {
         return $user;
     }
 
-        public function clear(){
+    /**
+     * Clear User Session
+     */
+    public function clear(){
         session_unset();
     }
     

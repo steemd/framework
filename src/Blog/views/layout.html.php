@@ -53,7 +53,7 @@ $activeIfRoute = function ($item) use (&$route) {
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li <?php echo $activeIfRoute('profile') ?>><a href="<?php echo $getRoute('profile')?>">Profile</a></li>
-                            <li <?php echo $activeIfRoute('list_post') ?>><a href="<?php echo $getRoute('list_post')?>">Posts list</a></li>
+                            <li <?php echo $activeIfRoute('list_post') ?>><a href="<?php echo $getRoute('list_post')?>">Blog editor</a></li>
                             <li class="divider"></li>
                             <li><a href="<?php echo $getRoute('logout')?>">Logout</a></li>
                         </ul>

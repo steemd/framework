@@ -25,7 +25,10 @@ class ProfileController extends Controller {
                 $user->password = $this->getRequest()->post('password');
                 $user->role     = 'ROLE_USER';
                 $user->save();
-                return $this->redirect($this->generateRoute('home'), 'The user data has been update successfully');
+                
+                Service::get('security')->clear();
+                
+                return $this->redirect($this->generateRoute('home'), 'The user data has been update successfully <br>Please login again!');
             } catch (DatabaseException $e) {
                 $error = $e->getMessage();
             }

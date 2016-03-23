@@ -35,6 +35,7 @@ return array(
         'pattern'       => '/profile',
         'controller'    => 'CMS\\Controller\\ProfileController',
         'action'        => 'update',
+        'security'   => array('ROLE_USER'),
         '_requirements' => array(
             '_method' => 'POST'
         )
@@ -42,7 +43,8 @@ return array(
     'profile'        => array(
         'pattern'    => '/profile',
         'controller' => 'CMS\\Controller\\ProfileController',
-        'action'     => 'get'
+        'action'     => 'get',
+        'security'   => array('ROLE_USER'),
     ),
     'add_post'       => array(
         'pattern'    => '/posts/add',
@@ -62,6 +64,7 @@ return array(
         'pattern'       => '/posts/{id}/edit',
         'controller'    => 'CMS\\Controller\\BlogController',
         'action'        => 'edit',
+        'security'   => array('ROLE_USER'),
         '_requirements' => array(
             'id'      => '\d+',
             '_method' => 'POST'
@@ -71,5 +74,15 @@ return array(
         'pattern'       => '/posts/list',
         'controller'    => 'CMS\\Controller\\BlogController',
         'action'        => 'list',
+        'security'   => array('ROLE_USER'),
+    ),
+    'remove_post'      => array(
+        'pattern'       => '/posts/{id}/remove',
+        'controller'    => 'CMS\\Controller\\BlogController',
+        'action'        => 'remove',
+        'security'   => array('ROLE_USER'),
+         '_requirements' => array(
+            'id' => '\d+'
+        )
     ),
 );

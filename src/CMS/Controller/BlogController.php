@@ -50,4 +50,11 @@ class BlogController extends Controller {
     function listAction(){
        return $this->render('list.html', array('posts' => Post::find('all')));
     }
+    
+    function removeAction($id){
+        
+        Post::remove((int) $id);
+        
+        return $this->redirect($this->generateRoute('home'), 'Post '.$id.' was remove successfully!');
+    }
 }
