@@ -9,6 +9,8 @@ use Framework\Security\Security;
 use Framework\Session\Session;
 use Framework\DI\Service;
 use Framework\Exception\RoleException;
+use Framework\Exception\HttpNotFoundException;
+use Framework\Exception\DatabaseException;
 
 /**
  * Application is a main class to load app
@@ -31,6 +33,7 @@ class Application {
      */
     function __construct($path) {
         $this->config = include($path);
+
         Service::set('config', $this->config);
         Service::set('routes', $this->config['routes']);
         Service::set('pdo', $this->config['pdo']);
@@ -50,49 +53,43 @@ class Application {
             if (is_array($routeInfo)) {
                 Service::set('route', $routeInfo);
 
-                //@TODO security varification user
-                if (isset($routeInfo['security'][0]) && !Service::get('session')->get('auth')){
+                //Security - user Role Verification
+                Service::get('security')->userRoleVerification();
 
-                    if ($role == Service::get('session')->get('userRole')){
-                       Session::set('returnUrl', Service::get('route')['pattern']);
-                       throw new RoleException('You dont have anout permission to enter'); 
-                    }     
-                }
-                
                 $controllerName = $routeInfo['controller'];
-                $actionName = $routeInfo['action'].'Action';
+                $actionName = $routeInfo['action'] . 'Action';
                 $params = $routeInfo['params'];
 
                 $reflectionClass = new \ReflectionClass($controllerName);
 
                 if ($reflectionClass->isInstantiable()) {
                     $reflectionObj = $reflectionClass->newInstanceArgs();
-                    
-                    if ($reflectionClass->hasMethod($actionName)){   
+
+                    if ($reflectionClass->hasMethod($actionName)) {
                         $reflectionMethod = $reflectionClass->getMethod($actionName);
                         $response = $reflectionMethod->invokeArgs($reflectionObj, $params);
-                        
+
                         if (!($response instanceof Response)) {
-                            throw new \Exception('Method - <b>'. $actionName .'</b> return not instance of class Response');
+                            throw new \Exception('Method - <b>' . $actionName . '</b> return not instance of class Response');
                         }
-                        
                     } else {
-                        throw new \Exception('Can not find Method - '.  $actionName);
+                        throw new \Exception('Can not find Method - ' . $actionName);
                     }
-                    
                 } else {
                     throw new \Exception('Can not create Object from Class - ' . $controllerName);
                 }
             } else {
-                throw new \Exception('404 - Page Not Found');
+                throw new HttpNotFoundException('Page Not Found');
             }
         } catch (RoleException $e) {
             $response = new ResponseRedirect('/login');
-            
-        } catch (\Exception $e) {    
-            $response = new Response('<b>My Message:</b> '.$e->getMessage().'<br />');
+        } catch (HttpNotFoundException $e) {
+            $content = $e->getRenderContent();
+            $response = new Response($content);
+        } catch (\Exception $e) {
+            $response = new Response('<b>Message:</b> ' . $e->getMessage() . '<br />');
         }
-        
+
         $response->send();
     }
 

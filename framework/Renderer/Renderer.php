@@ -99,9 +99,9 @@ class Renderer {
         //Render main layout 
         ob_start();
         include $this->layoutUrl;
-        $resalt = ob_get_contents();
+        $result = ob_get_contents();
         ob_end_clean();
         
-        return $resalt;
+        return $result;
     }
 }

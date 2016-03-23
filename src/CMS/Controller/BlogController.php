@@ -55,6 +55,6 @@ class BlogController extends Controller {
         
         Post::remove((int) $id);
         
-        return $this->redirect($this->generateRoute('home'), 'Post '.$id.' was remove successfully!');
+        return $this->redirect($this->generateRoute('list_post'), 'Post '.$id.' was remove successfully!');
     }
 }
