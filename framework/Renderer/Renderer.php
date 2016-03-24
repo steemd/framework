@@ -95,9 +95,19 @@ class Renderer {
         //Render main layout 
         ob_start();
         include $this->layoutUrl;
+        $this->renderDevMode();        
         $result = ob_get_contents();
         ob_end_clean();
         
         return $result;
+    }
+    
+    /**
+     * Render debug information
+     */
+    function renderDevMode (){  
+        if (Service::get('config')['mode'] == 'dev') {
+            include __DIR__.'/../../app/Resources/views/devpanel.html.php';
+        }
     }
 }

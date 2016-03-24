@@ -86,15 +86,12 @@ class Application {
             }
         } catch (RoleException $e) {
             $response = new ResponseRedirect('/login');
-            
         } catch (HttpNotFoundException $e) {
             $content = $e->getExceptionContent('Error - 404');
             $response = new Response($content, 404);
-        
-        } catch (CustomException $e){
+        } catch (CustomException $e) {
             $content = $e->getExceptionContent();
             $response = new Response($content, 500);
-            
         } catch (\Exception $e) {
             $response = new Response('<b>Message:</b> ' . $e->getMessage() . '<br />');
         }
