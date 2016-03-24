@@ -82,3 +82,4 @@ class Loader {
 Loader::getInstance();
 
 Loader::addNamespacePath('Framework\\', __DIR__);
+Loader::addNamespacePath('CMS\\',__DIR__.'/../src/CMS');

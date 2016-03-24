@@ -12,10 +12,9 @@
         </div>
 
     <?php } ?>
-
-    <div>
-        <?php $include('Blog\\Controller\\PostController', 'getPost', array('id' => 'TestId')) ?>
-    </div>
-
 </div>
+<div class="col-sm-4">
+    <?php $include('Blog\\Controller\\PostController', 'getPost', array('id' => 'TestId')) ?>
+</div>
+
 

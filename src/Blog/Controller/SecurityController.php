@@ -66,7 +66,7 @@ class SecurityController extends Controller
                 $errors = array($e->getMessage());
             }
         }
-
+        
         return $this->render('signin.html', array('errors' => $errors));
     }
 }
