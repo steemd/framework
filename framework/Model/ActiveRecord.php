@@ -4,6 +4,7 @@ namespace Framework\Model;
 
 use Framework\DI\Service;
 use Framework\Session\Session;
+use Framework\Exception\DatabaseException;
 
 /**
  * ActiveRecord its main Model Class to get connection whith DB
@@ -87,7 +88,7 @@ abstract class ActiveRecord {
         }
 
         if (!$query->execute()) {
-            throw new \Exception('Cant save object');
+            throw new DatabaseException('Cant save object');
         }
     }
 

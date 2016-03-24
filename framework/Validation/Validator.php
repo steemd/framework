@@ -55,30 +55,7 @@ class Validator {
             }
         }
 
-        if ($token = $this->validToken()) {
-            $res = false;
-            $this->errors['token'] = $token;
-        }
-
         return $res;
-    }
-
-    /**
-     * Validate token data
-     * 
-     * @return boolean|string
-     */
-    private function validToken() {
-        $request = new Request();
-        $fromPost = $request->post('token');
-        $fromCookie = Session::get('token');
-        unset(Service::get('session')->token);
-
-        if ($fromPost !== $fromCookie) {
-            return 'Not valid token data';
-        } else {
-            return false;
-        }
     }
 
     /**

@@ -35,7 +35,7 @@ class Response {
     protected  $contentType;
 
     /**
-     * Constructor init Object method add properties
+     * Constructor init default properties
      * 
      * @param type $content
      * @param type $status

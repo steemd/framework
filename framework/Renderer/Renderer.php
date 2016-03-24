@@ -49,10 +49,6 @@ class Renderer {
     public function renderContent() {
 
         extract($this->data);
-        
-        if (!empty($errors['token'])){
-            $error = $errors['token'];
-        }
 
         $include = function($controllerName, $actionName, $data = array()) { 
             $reflectionMethod  = new \ReflectionMethod($controllerName, $actionName.'Action');

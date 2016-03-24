@@ -11,6 +11,7 @@ use Framework\DI\Service;
 use Framework\Exception\RoleException;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\DatabaseException;
+use Framework\Exception\CustomException;
 
 /**
  * Application is a main class to load app
@@ -54,7 +55,9 @@ class Application {
                 Service::set('route', $routeInfo);
 
                 //Security - user Role Verification
-                Service::get('security')->userRoleVerification();
+                Service::get('security')->getUserRoleVerification();
+                // Security - validation token
+                Service::get('security')->getTokenValidation();
 
                 $controllerName = $routeInfo['controller'];
                 $actionName = $routeInfo['action'] . 'Action';
@@ -83,9 +86,15 @@ class Application {
             }
         } catch (RoleException $e) {
             $response = new ResponseRedirect('/login');
+            
         } catch (HttpNotFoundException $e) {
-            $content = $e->getRenderContent();
-            $response = new Response($content);
+            $content = $e->getExceptionContent('Error - 404');
+            $response = new Response($content, 404);
+        
+        } catch (CustomException $e){
+            $content = $e->getExceptionContent();
+            $response = new Response($content, 500);
+            
         } catch (\Exception $e) {
             $response = new Response('<b>Message:</b> ' . $e->getMessage() . '<br />');
         }

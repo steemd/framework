@@ -5,6 +5,8 @@ namespace Framework\Security;
 use Framework\Session\Session;
 use Framework\DI\Service;
 use Framework\Exception\RoleException;
+use Framework\Request\Request;
+use Framework\Exception\CustomException;
 
 /**
  * Description of Security
@@ -57,16 +59,35 @@ class Security {
         session_unset();
     }
 
-    public function userRoleVerification() {
+    /**
+     * Verification user role
+     * 
+     * @throws RoleException
+     */
+    public function getUserRoleVerification() {
 
         $route = Service::get('route');
         if (isset($route['security'][0]) && !Service::get('session')->get('auth')) {
 
             if ($role == Service::get('session')->get('userRole')) {
-                Session::set('returnUrl', Service::get('route')['pattern']);
+                Session::set('returnUrl', str_replace('/web', '', $_SERVER['REDIRECT_URL']));
                 throw new RoleException('You dont have anout permission to enter');
             }
         }
     }
 
+    /**
+     * Validation token
+     * 
+     * @throws Exception
+     */
+    public function getTokenValidation(){
+        $request = new Request();
+        
+        if ($request->post('token')) {
+            if ($request->post('token') !== Service::get('session')->token){
+                throw new CustomException('Invalid token');
+            }
+        }
+    }
 }
