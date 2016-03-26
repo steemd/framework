@@ -36,7 +36,7 @@
                             </td>
                             <td class="text-right">
                                 <a href="/posts/<?php echo $post->id; ?>/edit" class="btn btn-default"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a>
-                                <a href="/posts/<?php echo $post->id; ?>/remove" class="btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove</a>
+                                <a href="/posts/<?php echo $post->id; ?>/remove" class="btn btn-default" onclick="var remove = confirm('Are you sure want to delete this post!'); if(!remove){return false;}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Remove</a>
                             </td>
                         </tr>
                     <?php } ?> 
