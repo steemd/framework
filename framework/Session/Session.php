@@ -55,22 +55,22 @@ class Session {
         return isset($_SESSION[$name]);
     }
     /**
-     * Save session data
+     * Interface to save session data
      * 
      * @param type $name
      * @param type $value
      */
-    static function set($name, $value) {
+    public static function set($name, $value) {
         $_SESSION[$name] = $value;
     }
     
     /**
-     * Return data from session
+     * Interface to get data from session
      * 
      * @param type $name
      * @return type
      */
-    static function get($name) {
+    public static function get($name) {
         return $_SESSION[$name];
     }
     

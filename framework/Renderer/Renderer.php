@@ -15,11 +15,17 @@ class Renderer {
 
     /**
      * @var string $layoutUrl
-     * @var string $templateUrl
-     * @var array $date
      */
     private $layoutUrl;
+    
+    /**
+     * @var string $templateUrl
+     */
     private $templateUrl;
+    
+    /**
+     * @var array $data 
+     */
     private $data;
 
     /**
@@ -48,12 +54,10 @@ class Renderer {
      */
     public function renderContent() {
 
+        //get all controller input data 
         extract($this->data);
-        
-        if (!empty($errors['token'])){
-            $error = $errors['token'];
-        }
 
+        //include controller relust in content
         $include = function($controllerName, $actionName, $data = array()) { 
             $reflectionMethod  = new \ReflectionMethod($controllerName, $actionName.'Action');
             $response = $reflectionMethod->invokeArgs(new $controllerName(), $data);
@@ -63,18 +67,27 @@ class Renderer {
             echo '</p>';
         };
         
+        //generate CSRF token to hidden form element
         $generateToken = function(){
-            $token = md5('solt_string'.uniqid());
-            Session::set('token', $token);      
-            echo '<input type="hidden" value="'.$token.'" name="token">';
+            $csrfToken = Service::get('security')->generateCsrfToken();
+            echo '<input type="hidden" value="'.$csrfToken.'" name="csrfToken">';
         };
         
+        //get current route information
         $getRoute = function($name) {
             $routes = Service::get('routes');
             return $routes[$name]['pattern'];
         };
         
         $route = Service::get('route');
+        
+        $request = new Request();
+        
+        if($request->isPost() && empty($post)){
+            $post = new \stdClass();
+            $post->title = $request->post('title');
+            $post->content = $request->post('content');
+        }
         
         if (Session::get('auth')){
            $user = Service::get('security')->getUser(); 
@@ -99,9 +112,19 @@ class Renderer {
         //Render main layout 
         ob_start();
         include $this->layoutUrl;
+        $this->renderDevMode();        
         $result = ob_get_contents();
         ob_end_clean();
         
         return $result;
+    }
+    
+    /**
+     * Include debug information
+     */
+    function renderDevMode (){  
+        if (Service::get('config')['mode'] == 'dev') {
+            include __DIR__.'/../../app/Resources/views/devpanel.html.php';
+        }
     }
 }

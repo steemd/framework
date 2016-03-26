@@ -8,18 +8,11 @@
 
 namespace Framework\Exception;
 
-use Framework\Renderer\Renderer;
 /**
  * Description of HttpNotFoundException
  *
  * @author steemd
  */
-class HttpNotFoundException extends \Exception {
-    
-    function getRenderContent($title = '404 Error') {
-        $renderer = new Renderer('show.html', array('title' => $title, 'message' => $this->getMessage()), 'Blog\\Controller\\ExceptionController');
-        $result = $renderer->renderContent();
-        return $result;
-        
-    }
+class HttpNotFoundException extends CustomException {
+
 }

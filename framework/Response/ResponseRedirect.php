@@ -17,7 +17,7 @@ class ResponseRedirect extends Response {
     private $url;
 
     /**
-     * Constructor method add properties
+     * ResponseRedirect Constructor method
      * 
      * @param type $url
      * @param type $text
@@ -25,9 +25,16 @@ class ResponseRedirect extends Response {
      * @param type $contentType
      */
     function __construct($url = '/', $text = '', $status = 303, $contentType = 'text/html; charset=utf-8') {
-        $this->url = $url;
+        
         $this->status = $status;
         $this->contentType = $contentType;
+        $this->content = '';
+        
+        if (strpos($_SERVER['REQUEST_URI'], '/web') === FALSE) {
+            $this->url = $url;
+        } else {
+            $this->url = '/web'.$url;
+        }
     }
     
     /**
@@ -38,12 +45,5 @@ class ResponseRedirect extends Response {
         header('Content-Type: '.$this->contentType);
         header('Location: '. $this->url);
     }
-
-    /**
-     * generate response content
-     */
-    public function getContent() {
-        echo  '';
-    } 
    
 }

@@ -3,7 +3,7 @@
 namespace Framework\Model;
 
 use Framework\DI\Service;
-use Framework\Session\Session;
+use Framework\Exception\DatabaseException;
 
 /**
  * ActiveRecord its main Model Class to get connection whith DB
@@ -21,7 +21,7 @@ abstract class ActiveRecord {
      * Consrtuctor method
      */
     function __construct() {
-        
+        //@TODO init some properties or methods before save;
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class ActiveRecord {
             }
         } else {
             $query = $db->prepare("SELECT * FROM $table WHERE id = :id");
-            $query->execute(array(':id' => $data));
+            $query->execute(array(':id' => (int) $data));
 
             $resalt = $query->fetchObject();
         }
@@ -87,7 +87,7 @@ abstract class ActiveRecord {
         }
 
         if (!$query->execute()) {
-            throw new \Exception('Cant save object');
+            throw new DatabaseException('Cant save object');
         }
     }
 
