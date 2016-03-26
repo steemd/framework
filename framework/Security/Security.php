@@ -64,7 +64,7 @@ class Security {
      * 
      * @throws RoleException
      */
-    public function getUserRoleVerification() {
+    public function verifyUserRole() {
 
         $route = Service::get('route');
         if (isset($route['security'][0]) && !Service::get('session')->get('auth')) {
@@ -81,13 +81,24 @@ class Security {
      * 
      * @throws Exception
      */
-    public function getTokenValidation(){
+    public function verifyCsrfToken(){
         $request = new Request();
         
-        if ($request->post('token')) {
-            if ($request->post('token') !== Service::get('session')->token){
+        if ($request->isPost() && $request->post('csrfToken')) {
+            if ($request->post('csrfToken') !== Service::get('session')->csrfToken){
                 throw new CustomException('Invalid token');
             }
         }
+    }
+    
+    /**
+     * Generate and return CSRF token
+     * 
+     * @return type
+     */
+    public function generateCsrfToken(){
+        $csrfToken = md5('csrf_solt_string_'.uniqid());
+        Session::set('csrfToken', $csrfToken);
+        return $csrfToken;
     }
 }

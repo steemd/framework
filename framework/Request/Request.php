@@ -19,6 +19,7 @@ class Request {
      * Return $_POST data by name
      * 
      * @param type $name
+     * 
      * @return type $data
      */
     public function post($name){  
@@ -30,6 +31,7 @@ class Request {
      * Return $_GET data by name
      * 
      * @param type $name
+      * 
      * @return type $data
      */
     public function get($name){  
@@ -41,11 +43,22 @@ class Request {
      * Return $_COOKIE data by name
      * 
      * @param type $name
+      * 
      * @return type $data
      */
     public function getCookie($name){  
         $data = $_COOKIE[$name];   
         return $data;
+    }
+    
+    /**
+     * Set $_COOKIE data
+     * 
+     * @param type $name
+     * @param type $value
+     */
+    public function setCookie($name, $value){  
+        setcookie($name, $value);
     }
 
     /**

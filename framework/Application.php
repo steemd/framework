@@ -12,6 +12,7 @@ use Framework\Exception\RoleException;
 use Framework\Exception\HttpNotFoundException;
 use Framework\Exception\DatabaseException;
 use Framework\Exception\CustomException;
+use Framework\Request\Request;
 
 /**
  * Application is a main class to load app
@@ -55,9 +56,9 @@ class Application {
                 Service::set('route', $routeInfo);
 
                 //Security - user Role Verification
-                Service::get('security')->getUserRoleVerification();
+                Service::get('security')->verifyUserRole();
                 // Security - validation token
-                Service::get('security')->getTokenValidation();
+                Service::get('security')->verifyCsrfToken();
 
                 $controllerName = $routeInfo['controller'];
                 $actionName = $routeInfo['action'] . 'Action';

@@ -16,14 +16,32 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">GET<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <pre>
+                                <?php print_r($_GET); ?>
+                            </pre>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">POST<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <p>
                             <pre>
                                 <?php print_r($_POST); ?>
                             </pre>
-                            </p>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">COOKIE<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <pre>
+                                <?php print_r($_COOKIE); ?>
+                            </pre>
                         </li>
                     </ul>
                 </li>
@@ -31,11 +49,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SESSION<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <p>
                             <pre>
                                 <?php print_r($_SESSION); ?>
                             </pre>
-                            </p>
                         </li>
                     </ul>
                 </li>
@@ -43,16 +59,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SERVER<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <p>
                             <pre style ="max-width: 640px; min-width: 250px; max-height: 500px;">
                                 <?php print_r($_SERVER); ?>
                             </pre>
-
-                            </p>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
     </div>
-</nav>';
+</nav>
